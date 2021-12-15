@@ -1,5 +1,14 @@
 class App {
   constructor() {
+   const existingMenu = this.getItem('menu');
+
+    this.menu = existingMenu ? existingMenu : {
+      espresso: [],
+      frappuccino: [],
+      blended: [],
+      teavana: [],
+      desert: [],
+    };
     let category = this.getItem('category');
     if (!category) {
       this.setItem('category', 'espresso');
@@ -15,6 +24,7 @@ class App {
     const ul = this.$('#espresso-menu-list');
     const categories = document.getElementsByClassName('cafe-category-name');
     const categoryArr = Array.from(categories);
+
     categoryArr.forEach((cat) => {
       cat.addEventListener('click', (e) => {
         const dataCategoryName = e.target.getAttribute('data-category-name');
@@ -37,9 +47,11 @@ class App {
             this.$('#menu-management').innerText = '☕ 에스프레소 메뉴 관리';
             break;
         }
-        this.setMenu()
+
+        this.setMenu();
       });
     });
+
     ul.addEventListener('click', (e) => {
       if (e.target.classList.contains('menu-sold-out-button')) {
         const existingMenu = this.getItem('menu');
@@ -89,13 +101,7 @@ class App {
   setMenu() {
     const existingMenu = this.getItem('menu'); // string 값으로 받아옴
     if (!existingMenu) {
-      this.setItem('menu', {
-        espresso: [],
-        frappuccino: [],
-        blended: [],
-        teavana: [],
-        desert: [],
-      });
+      this.setItem('menu', this.menu);
     } else {
       const menuDetail = existingMenu[this.category];
       menuDetail.map((menu) => this.createLi(menu));
@@ -115,16 +121,15 @@ class App {
   }
 
   confirmMenuName() {
-    if (!!this.menuName.trim()) {
-      const existingMenu = this.getItem('menu');
+    const menuName = this.$('#espresso-menu-name').value;
+    if (!!menuName.trim()) {
       const newMenu = {
         id: this.menuId.next().value,
-        name: this.menuName.trim(),
+        name: menuName.trim(),
         soldOut: false,
       };
-      existingMenu[this.category].push(newMenu);
-      this.setItem('menu', existingMenu);
-      window.confirm('입력하시겠습니까?') && this.createLi(newMenu);
+      this.menu[this.category].push(newMenu);
+      this.setItem('menu', this.menu);
       window.confirm('입력하시겠습니까?')
         ? this.createLi(newMenu)
         : this.emptyInput();
