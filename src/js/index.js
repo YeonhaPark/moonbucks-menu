@@ -69,6 +69,7 @@ class App {
   setMenu() {
     const menuDetail = this.menu[this.category];
     menuDetail.map((menu) => this.createLi(menu));
+    this.updateMenuCount();
   }
 
   $(property) {
@@ -205,7 +206,6 @@ class App {
     const ul = this.$('#espresso-menu-list');
     ul.insertAdjacentHTML('beforeend', li);
     this.emptyInput();
-    this.updateMenuCount();
     this.resetInputVal();
   }
 }
