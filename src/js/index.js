@@ -195,8 +195,8 @@ class App {
   }
 
   createLi(menu) {
-    const li = `<li class="menu-list-item d-flex items-center py-2">
-        <span class="w-100 pl-2 menu-name">${menu.name}</span>
+    const li = `<li data-menu-item="${menu.id}" class="menu-list-item d-flex items-center py-2">
+        <span class="w-100 pl-2 menu-name ${menu.soldOut && "sold-out"}">${menu.name}</span>
         <button
         type="button"
         class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
