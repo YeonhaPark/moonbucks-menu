@@ -9,10 +9,8 @@ class App {
 
     this.menuId = this.generateId(menuId);
     this.category = category;
-    this.menuName = '';
     this.menuCount = 0;
 
-    const input = this.$('#espresso-menu-name');
     const form = this.$('#espresso-menu-form');
     const ul = this.$('#espresso-menu-list');
     const categories = document.getElementsByClassName('cafe-category-name');
@@ -127,6 +125,9 @@ class App {
       existingMenu[this.category].push(newMenu);
       this.setItem('menu', existingMenu);
       window.confirm('입력하시겠습니까?') && this.createLi(newMenu);
+      window.confirm('입력하시겠습니까?')
+        ? this.createLi(newMenu)
+        : this.emptyInput();
     }
   }
 
@@ -164,6 +165,10 @@ class App {
     ul.innerHTML = '';
   }
 
+  emptyInput() {
+    this.$('#espresso-menu-name').value = '';
+  }
+
   createLi(menu) {
     const li = `<li class="menu-list-item d-flex items-center py-2">
         <span class="w-100 pl-2 menu-name">${menu.name}</span>
@@ -188,9 +193,8 @@ class App {
       </li>`;
 
     const ul = this.$('#espresso-menu-list');
-
     ul.insertAdjacentHTML('beforeend', li);
-    this.menuName = '';
+    this.emptyInput();
     this.updateMenuCount();
     this.resetInputVal();
   }
