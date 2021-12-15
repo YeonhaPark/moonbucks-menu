@@ -1,55 +1,51 @@
 class App {
   constructor() {
-   const existingMenu = this.getItem('menu');
+    const existingMenu = this.getItem('menu');
 
-    this.menu = existingMenu ? existingMenu : {
-      espresso: [],
-      frappuccino: [],
-      blended: [],
-      teavana: [],
-      desert: [],
-    };
-    let category = this.getItem('category');
-    if (!category) {
-      this.setItem('category', 'espresso');
-      category = 'espresso';
-    }
+    this.menu = existingMenu
+      ? existingMenu
+      : {
+          espresso: [],
+          frappuccino: [],
+          blended: [],
+          teavana: [],
+          desert: [],
+        };
+
     const menuId = this.getItem('menu-id') || 0;
 
     this.menuId = this.generateId(menuId);
-    this.category = category;
+    this.category = 'espresso';
     this.menuCount = 0;
 
     const form = this.$('#espresso-menu-form');
     const ul = this.$('#espresso-menu-list');
-    const categories = document.getElementsByClassName('cafe-category-name');
-    const categoryArr = Array.from(categories);
+    const nav = document.getElementById('menu-nav');
 
-    categoryArr.forEach((cat) => {
-      cat.addEventListener('click', (e) => {
-        const dataCategoryName = e.target.getAttribute('data-category-name');
-        if (this.category !== dataCategoryName) this.removeAllLi();
-        this.category = dataCategoryName;
-        switch (dataCategoryName) {
-          case 'frappuccino':
-            this.$('#menu-management').innerText = '🥤 프라푸치노 메뉴 관리';
-            break;
-          case 'blended':
-            this.$('#menu-management').innerText = '🍹 블렌디드 메뉴 관리';
-            break;
-          case 'teavana':
-            this.$('#menu-management').innerText = '🫖 티바나 메뉴 관리';
-            break;
-          case 'desert':
-            this.$('#menu-management').innerText = '🍰 디저트 메뉴 관리';
-            break;
-          default:
-            this.$('#menu-management').innerText = '☕ 에스프레소 메뉴 관리';
-            break;
-        }
-
-        this.setMenu();
-      });
+    nav.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('cafe-category-name')) return;
+      const dataCategoryName = e.target.getAttribute('data-category-name');
+      if (this.category !== dataCategoryName) this.removeAllLi();
+      this.category = dataCategoryName;
+      
+      switch (dataCategoryName) {
+        case 'frappuccino':
+          this.$('#menu-management').innerText = '🥤 프라푸치노 메뉴 관리';
+          break;
+        case 'blended':
+          this.$('#menu-management').innerText = '🍹 블렌디드 메뉴 관리';
+          break;
+        case 'teavana':
+          this.$('#menu-management').innerText = '🫖 티바나 메뉴 관리';
+          break;
+        case 'desert':
+          this.$('#menu-management').innerText = '🍰 디저트 메뉴 관리';
+          break;
+        default:
+          this.$('#menu-management').innerText = '☕ 에스프레소 메뉴 관리';
+          break;
+      }
+      this.setMenu()
     });
 
     ul.addEventListener('click', (e) => {
@@ -71,13 +67,8 @@ class App {
   }
 
   setMenu() {
-    const existingMenu = this.getItem('menu'); // string 값으로 받아옴
-    if (!existingMenu) {
-      this.setItem('menu', this.menu);
-    } else {
-      const menuDetail = existingMenu[this.category];
-      menuDetail.map((menu) => this.createLi(menu));
-    }
+    const menuDetail = this.menu[this.category];
+    menuDetail.map((menu) => this.createLi(menu));
   }
 
   $(property) {
@@ -139,7 +130,7 @@ class App {
     const foundIdx = this.menu[this.category].findIndex(
       (menu) => menu.id === parseInt(menuId)
     );
-    this.menu[this.category].splice(foundIdx, 1)
+    this.menu[this.category].splice(foundIdx, 1);
     this.setItem('menu', this.menu);
     e.target.closest('li').remove();
     this.updateMenuCount();
@@ -185,8 +176,12 @@ class App {
   }
 
   createLi(menu) {
-    const li = `<li data-menu-item="${menu.id}" class="menu-list-item d-flex items-center py-2">
-        <span class="w-100 pl-2 menu-name ${menu.soldOut && "sold-out"}">${menu.name}</span>
+    const li = `<li data-menu-item="${
+      menu.id
+    }" class="menu-list-item d-flex items-center py-2">
+        <span class="w-100 pl-2 menu-name ${menu.soldOut && 'sold-out'}">${
+      menu.name
+    }</span>
         <button
         type="button"
         class="bg-gray-50 text-gray-500 text-sm mr-1 menu-sold-out-button"
