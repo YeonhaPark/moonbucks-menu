@@ -97,6 +97,8 @@ class App {
       window.confirm('입력하시겠습니까?')
         ? this.createLi(newMenu)
         : this.emptyInput();
+
+      this.updateMenuCount()
     }
   }
 
