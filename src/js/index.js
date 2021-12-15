@@ -62,10 +62,6 @@ class App {
       }
     });
 
-    input.addEventListener('input', (e) => {
-      setTimeout(() => this.updateMenuName(e.target.value), 0);
-    });
-
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       this.confirmMenuName();
@@ -125,10 +121,6 @@ class App {
     }
   }
 
-  updateMenuName(val) {
-    this.menuName = val;
-  }
-
   updateMenuCount() {
     this.menuCount = document.querySelectorAll('.menu-list-item').length;
     document.getElementsByClassName(
@@ -143,13 +135,12 @@ class App {
 
   removeLi(e) {
     if (!window.confirm('정말로 삭제하시겠습니까?')) return;
-    const existingMenu = this.getItem('menu');
-    const liToDelete = e.target.closest('li');
-    const allLi = document.querySelectorAll('.menu-list-item');
-    const listArr = Array.prototype.slice.call(allLi);
-    const idx = listArr.indexOf(liToDelete);
-    existingMenu[this.category].splice(idx, 1);
-    this.setItem('menu', existingMenu);
+    const menuId = e.target.closest('li').dataset.menuItem;
+    const foundIdx = this.menu[this.category].findIndex(
+      (menu) => menu.id === parseInt(menuId)
+    );
+    this.menu[this.category].splice(foundIdx, 1)
+    this.setItem('menu', this.menu);
     e.target.closest('li').remove();
     this.updateMenuCount();
   }
@@ -182,12 +173,11 @@ class App {
     const modifiedName = window.prompt('메뉴명을 수정하세요', span.innerText);
     span.innerText = modifiedName;
     const menuId = e.target.closest('li').dataset.menuItem;
-    const existingMenu = this.getItem('menu');
-    const foundIdx = existingMenu[this.category].findIndex(
+    const foundIdx = this.menu[this.category].findIndex(
       (menu) => menu.id === parseInt(menuId)
     );
-    existingMenu[this.category][foundIdx].name = modifiedName;
-    this.setItem('menu', existingMenu);
+    this.menu[this.category][foundIdx].name = modifiedName;
+    this.setItem('menu', this.menu);
   }
 
   emptyInput() {
