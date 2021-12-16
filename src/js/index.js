@@ -1,4 +1,5 @@
 import { $, generateId } from '../utils/utils.js';
+
 class App {
   constructor() {
     const existingMenu = this.getItem('menu');
@@ -20,6 +21,7 @@ class App {
     this.menuCount = 0;
 
     const form = $('#menu-form');
+    const ul = $('#espresso-menu-list');
     const nav = document.getElementById('menu-nav');
 
     nav.addEventListener('click', (e) => {
@@ -51,8 +53,13 @@ class App {
   }
 
   setMenu() {
-    const menuDetail = this.menu[this.category];
-    menuDetail.map((menu) => this.createLi(menu));
+    const ul = $('#espresso-menu-list');
+    const lists = this.menu[this.category].map(menu => {
+      return this.createLi(menu)
+    })
+    ul.innerHTML = lists.join('');
+    this.emptyInput();
+    this.resetInputVal();
     this.updateMenuCount();
   }
 
@@ -70,7 +77,7 @@ class App {
         ? this.createLi(newMenu)
         : this.emptyInput();
 
-      this.updateMenuCount()
+      this.updateMenuCount();
     }
   }
 
@@ -151,7 +158,8 @@ class App {
   }
 
   createLi(menu) {
-    const li = `<li data-menu-item="${
+    
+    return `<li data-menu-item="${
       menu.id
     }" class="menu-list-item d-flex items-center py-2">
         <span class="w-100 pl-2 menu-name ${menu.soldOut && 'sold-out'}">${
@@ -176,11 +184,7 @@ class App {
           삭제
         </button>
       </li>`;
-
-    const ul = this.$('#espresso-menu-list');
-    ul.insertAdjacentHTML('beforeend', li);
-    this.emptyInput();
-    this.resetInputVal();
+   
   }
 }
 
