@@ -1,3 +1,4 @@
+import { $, generateId } from '../utils/utils.js';
 class App {
   constructor() {
     const existingMenu = this.getItem('menu');
@@ -14,12 +15,11 @@ class App {
 
     const menuId = this.getItem('menu-id') || 0;
 
-    this.menuId = this.generateId(menuId);
+    this.menuId = generateId(menuId);
     this.category = 'espresso';
     this.menuCount = 0;
 
-    const form = this.$('#espresso-menu-form');
-    const ul = this.$('#espresso-menu-list');
+    const form = $('#menu-form');
     const nav = document.getElementById('menu-nav');
 
     nav.addEventListener('click', (e) => {
@@ -27,25 +27,9 @@ class App {
       const dataCategoryName = e.target.getAttribute('data-category-name');
       if (this.category !== dataCategoryName) this.removeAllLi();
       this.category = dataCategoryName;
-      
-      switch (dataCategoryName) {
-        case 'frappuccino':
-          this.$('#menu-management').innerText = '🥤 프라푸치노 메뉴 관리';
-          break;
-        case 'blended':
-          this.$('#menu-management').innerText = '🍹 블렌디드 메뉴 관리';
-          break;
-        case 'teavana':
-          this.$('#menu-management').innerText = '🫖 티바나 메뉴 관리';
-          break;
-        case 'desert':
-          this.$('#menu-management').innerText = '🍰 디저트 메뉴 관리';
-          break;
-        default:
-          this.$('#menu-management').innerText = '☕ 에스프레소 메뉴 관리';
-          break;
-      }
-      this.setMenu()
+      $('#menu-management').innerText = `${e.target.innerText} 메뉴 관리`;
+
+      this.setMenu();
     });
 
     ul.addEventListener('click', (e) => {
@@ -72,20 +56,8 @@ class App {
     this.updateMenuCount();
   }
 
-  $(property) {
-    return document.querySelector(property);
-  }
-
-  *generateId(givenId) {
-    let id = givenId;
-    while (true) {
-      id++;
-      yield id;
-    }
-  }
-
   confirmMenuName() {
-    const menuName = this.$('#espresso-menu-name').value;
+    const menuName = $('#menu-name').value;
     if (!!menuName.trim()) {
       const newMenu = {
         id: this.menuId.next().value,
@@ -123,7 +95,7 @@ class App {
   }
 
   resetInputVal() {
-    const input = document.getElementById('espresso-menu-name');
+    const input = document.getElementById('menu-name');
     input.value = '';
   }
 
@@ -140,7 +112,7 @@ class App {
   }
 
   removeAllLi() {
-    const ul = this.$('#espresso-menu-list');
+    const ul = $('#espresso-menu-list');
     ul.innerHTML = '';
   }
 
@@ -175,7 +147,7 @@ class App {
   }
 
   emptyInput() {
-    this.$('#espresso-menu-name').value = '';
+    $('#menu-name').value = '';
   }
 
   createLi(menu) {
