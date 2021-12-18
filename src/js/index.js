@@ -137,11 +137,10 @@ class App {
   }
 
   createLi(menu) {
-    
     return `<li data-menu-item="${
       menu.id
     }" class="menu-list-item d-flex items-center py-2">
-        <span class="w-100 pl-2 menu-name ${menu.soldOut && 'sold-out'}">${
+        <span class="w-100 pl-2 menu-name ${menu.isSoldOut && 'sold-out'}">${
       menu.name
     }</span>
         <button
@@ -163,7 +162,6 @@ class App {
           삭제
         </button>
       </li>`;
-   
   }
 }
 
