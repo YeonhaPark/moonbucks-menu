@@ -42,6 +42,7 @@ class App {
       const list = await getMenu(category);
       this.renderLi(list);
     } catch (err) {
+      alert(err.message)
       throw err;
     }
   }
@@ -58,6 +59,7 @@ class App {
       const modified = await putMenu(this.category, menu);
       span.innerText = modified.name;
     } catch (err) {
+      alert(err.message)
       throw err;
     }
   }
@@ -76,14 +78,20 @@ class App {
   }
 
   async confirmMenuName() {
-    const name = $('#menu-name').value.trim();
-    if (!!name) {
-      if (window.confirm('입력하시겠습니까?')) {
-        await postMenu(this.category, name);
-        this.renderMenu(this.category);
+    try {
+      const name = $('#menu-name').value.trim();
+      if (!!name) {
+        if (window.confirm('입력하시겠습니까?')) {
+          await postMenu(this.category, name);
+          this.renderMenu(this.category);
+        }
+        this.emptyInput();
       }
-      this.emptyInput();
+    } catch (err) {
+      alert(err.message)
+      throw err;
     }
+  
   }
 
   renderMenuCount(count) {
@@ -104,6 +112,7 @@ class App {
       await deleteMenu(this.category, id)
       this.renderMenu(this.category)
     } catch(err) {
+      alert(err.message);
       throw err;
     }
   }
@@ -128,6 +137,7 @@ class App {
       await putSoldout(this.category, menu);
       this.renderMenu(this.category);
     } catch (err) {
+      alert(err.message);
       throw err;
     }
   }

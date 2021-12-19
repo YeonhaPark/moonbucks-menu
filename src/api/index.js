@@ -4,6 +4,7 @@ const getMenu = async (category) => {
   try {
     const res = await fetch(`${serverAddr}/category/${category}/menu`);
     const result = await res.json();
+    if (result.message) throw new Error(result.message)
     return result;
   } catch (err) {
     throw err;
@@ -25,6 +26,7 @@ const putMenu = async (category, menu) => {
       }
     );
     const result = await res.json();
+    if (result.message) throw new Error(result.message)
     return result;
   } catch (err) {
     throw err;
@@ -46,6 +48,7 @@ const putSoldout = async (category, menu) => {
       }
     );
     const result = await res.json();
+    if (result.message) throw new Error(result.message)
     return result;
   } catch (err) {
     throw err;
@@ -54,12 +57,15 @@ const putSoldout = async (category, menu) => {
 
 const deleteMenu = async (category, id) => {
   try {
-    await fetch(`${serverAddr}/category/${category}/menu/${id}`, {
+    const res = await fetch(`${serverAddr}/category/${category}/menu/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
     });
+
+    const result = await res.json();
+    if (result.message) throw new Error(result.message)
   } catch (err) {
     throw err;
   }
@@ -77,6 +83,7 @@ const postMenu = async (category, name) => {
       }),
     });
     const result = await res.json();
+    if (result.message) throw new Error(result.message)
     return result;
   } catch (err) {
     throw err;
